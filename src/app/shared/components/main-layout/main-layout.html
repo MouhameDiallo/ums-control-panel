@@ -1,0 +1,18 @@
+<div class="flex h-screen bg-gray-50">
+
+  <aside class="w-64 flex-shrink-0 z-10">
+    <app-sidebar />
+  </aside>
+
+  <main class="flex-grow overflow-y-auto">
+    <header class="p-4 bg-white shadow-md z-0">
+      <h2 class="text-3xl font-bold text-gray-800">
+          UCAD Mobile Control Panel
+      </h2>
+    </header>
+
+    <div>
+      <router-outlet />
+    </div>
+  </main>
+</div>
