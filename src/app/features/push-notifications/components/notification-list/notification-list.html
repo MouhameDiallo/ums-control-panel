@@ -1,0 +1,142 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- En-tête -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            <i class="fas fa-calendar-alt mr-3 text-indigo-600"></i>
+            Notifications envoyées
+          </h1>
+          <p class="text-gray-600">Gérez et consultez toutes les notifications</p>
+        </div>
+        <button
+          routerLink="sender"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition duration-200 flex items-center">
+          <i class="fas fa-plus mr-2"></i>
+          Envoyer une notification
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtres -->
+    <div *ngIf="notifications" class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Recherche -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-search mr-2"></i>Rechercher
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onFilterChange()"
+            placeholder="Titre, description ou lieu..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
+        </div>
+
+        <!-- Catégorie -->
+      </div>
+
+      <div class="mt-4 text-sm text-gray-600">
+        <i class="fas fa-info-circle mr-2"></i>
+        {{ notifications.length }} notifications(s) trouvé(s)
+      </div>
+    </div>
+
+    <!-- Tableau des événements -->
+    <div *ngIf="notifications" class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-indigo-600 text-white">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold">Titre</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold">Message</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold">Date d'envoi</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold">Destinataires</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold">Actions</th>
+          </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+          <tr *ngFor="let notification of notifications; let i = index"
+              [class.bg-gray-50]="i % 2 === 0"
+              [class.bg-white]="i % 2 !== 0">
+<!--            <td class="px-6 py-4">-->
+<!--              <img *ngIf="notification.image_url"-->
+<!--                   [src]="notification.image_url"-->
+<!--                   [alt]="notification.title"-->
+<!--                   class="w-16 h-16 object-cover rounded-lg" />-->
+<!--              <div *ngIf="!notification.image_url"-->
+<!--                   class="w-16 h-16 bg-gray-300 rounded-lg flex items-center justify-center">-->
+<!--                <i class="fas fa-image text-gray-500"></i>-->
+<!--              </div>-->
+<!--            </td>-->
+            <td class="px-6 py-4">
+              <div class="font-semibold text-gray-800">{{ notification.titre }}</div>
+            </td>
+            <td class="px-6 py-4">
+              <div class="font-semibold text-gray-800">{{ notification.message }}</div>
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
+              <i class="fas fa-clock mr-2 text-indigo-600"></i>
+              {{ notification.date_creation | date: "dd/MM/yyyy HH:mm" }}
+            </td>
+
+            <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
+              <span
+                *ngFor="let type of getTypeOfRecipient(notification.cibles)"
+                class="px-2 py-1.5 mr-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500"
+              >
+                {{type}}
+              </span>
+            </td>
+
+            <td class="px-6 py-4">
+              <div class="flex space-x-2">
+                <button class="text-purple-600 hover:text-purple-800" title="Notification de rappel">
+                  <i class="fa-solid fa-bell"></i>
+                </button>
+                <button
+                  class="text-blue-600 hover:text-blue-800"
+                  title="Voir">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button
+                  class="text-green-600 hover:text-green-800"
+                  title="Éditer">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="text-red-600 hover:text-red-800" title="Supprimer">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">
+        <div class="text-sm text-gray-600">
+          Page {{ currentPage }} sur {{ totalPages }}
+        </div>
+        <div class="flex space-x-2">
+          <button
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+            class="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+            class="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
