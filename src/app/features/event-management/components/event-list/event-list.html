@@ -106,6 +106,7 @@
                   <i class="fa-solid fa-bell"></i>
                 </button>
                 <button
+                  (click)="eventToDisplay=event;showCard=true;"
                   class="text-blue-600 hover:text-blue-800"
                   title="Voir">
                   <i class="fas fa-eye"></i>
@@ -152,3 +153,5 @@
 </div>
 
 <app-event-form *ngIf="showForm" (signalToReload)="loadEvents()" [eventToEdit]="eventToEdit" (modalCloser)="showForm=false;eventToEdit=null"></app-event-form>
+<!--<app-event-card *ngIf="showCard" [eventToDisplay]="eventToDisplay" (modalCloser)="showCard=false;eventToDisplay=null"></app-event-card>-->
+<app-event-card *ngIf="showCard && eventToDisplay" [eventToDisplay]="eventToDisplay" (modalCloser)="showCard=false;eventToDisplay=null;"></app-event-card>

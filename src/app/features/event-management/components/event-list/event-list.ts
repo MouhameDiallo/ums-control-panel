@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {EventService} from '../../event.service';
 import {EventForm} from '../event-form/event-form';
+import {EventCard} from '../event-card/event-card';
 
 @Component({
   selector: 'app-event-list',
@@ -11,7 +12,8 @@ import {EventForm} from '../event-form/event-form';
     FormsModule,
     NgForOf,
     NgIf,
-    EventForm
+    EventForm,
+    EventCard
   ],
   standalone: true,
   templateUrl: './event-list.html',
@@ -27,8 +29,10 @@ export class EventList implements OnInit {
   itemsPerPage: number = 5;
 
   showForm= false;
-
   eventToEdit: UniversityEvent|null = null;
+
+  showCard = false;
+  eventToDisplay: UniversityEvent|null = null;
 
   constructor(private eventService: EventService,
               private ref: ChangeDetectorRef) {}
@@ -42,7 +46,6 @@ export class EventList implements OnInit {
   }
 
   loadEvents(){
-    console.log("Loading")
     this.eventService.getEvents().subscribe({
       next: value => {
         this.events = value;
