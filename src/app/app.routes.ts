@@ -25,10 +25,10 @@ export const routes: Routes = [
         path: 'events',
         loadChildren: () => import('./features/event-management/event.routes').then(m => m.EventRoutes)
       },
-      // {
-      //   path: 'admin/users',
-      //   loadChildren: () => import('./features/user-management/user-management.routes').then(m => m.USER_ROUTES)
-      // },
+      {
+        path: 'admin/users',
+        loadChildren: () => import('./features/user-management/user.routes').then(m => m.UserRoutes)
+      },
       {
         path: 'admin/notifications',
         loadChildren: () => import('./features/push-notifications/notification.routes').then(m => m.NotificationRoutes)
