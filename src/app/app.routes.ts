@@ -1,24 +1,25 @@
 import { Routes } from '@angular/router';
 import {MainLayout} from './shared/components/main-layout/main-layout';
+import {Login} from './features/auth/login/login';
+import {adminGuard, authGuard} from './core/auth/auth-guard';
 
 
 export const routes: Routes = [
   // 1. Routes d'Authentification (sans Sidebar)
-  // {
-  //   path: 'auth',
-  //   loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES)
-  // },
+  {
+    path: 'login',
+    component: Login
+  },
 
   // 2. Routes Protégées (avec Sidebar/MainLayout)
   {
     path: '', // Ceci est le chemin de base (ex: /events, /admin/...)
     component: MainLayout, // Le composant de layout est le parent
-    // Protéger ces routes ici avec AuthGuard
-    // canActivate: [AuthGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: '',
-        redirectTo: 'events',
+        redirectTo: '/events',
         pathMatch: 'full'
       },
       {
@@ -27,6 +28,7 @@ export const routes: Routes = [
       },
       {
         path: 'admin/users',
+        canActivate: [adminGuard],
         loadChildren: () => import('./features/user-management/user.routes').then(m => m.UserRoutes)
       },
       {

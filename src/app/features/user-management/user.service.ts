@@ -1,7 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {NotificationWithTargets} from '../../core/models/notification.model';
 import {UserModel} from '../../core/models/user.model';
 
 @Injectable({
