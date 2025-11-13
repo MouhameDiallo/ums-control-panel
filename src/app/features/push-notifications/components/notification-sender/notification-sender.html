@@ -1,1 +1,234 @@
-<p>notification-sender works!</p>
+<div class="min-h-screen bg-gray-50 py-8 px-4">
+  <div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <!-- Header -->
+      <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+          Envoyer une notification push
+        </h1>
+        <p class="text-gray-600">
+          Sélectionnez les destinataires et composez votre message
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form (ngSubmit)="sendNotification()" #notificationForm="ngForm">
+        <!-- Titre -->
+        <div class="mb-6">
+          <label for="titre" class="block text-sm font-medium text-gray-700 mb-2">
+            Titre de la notification *
+          </label>
+          <input
+            type="text"
+            id="titre"
+            name="titre"
+            [(ngModel)]="notification.titre"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            placeholder="Ex: Réunion importante"
+          />
+        </div>
+
+        <!-- Message -->
+        <div class="mb-6">
+          <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+            Message *
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            [(ngModel)]="notification.message"
+            required
+            rows="4"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition resize-none"
+            placeholder="Votre message ici..."
+          ></textarea>
+        </div>
+
+        <!-- Media URL (optionnel) -->
+        <div class="mb-6">
+          <label for="media_url" class="block text-sm font-medium text-gray-700 mb-2">
+            URL média (optionnel)
+          </label>
+          <input
+            type="url"
+            id="media_url"
+            name="media_url"
+            [(ngModel)]="notification.media_url"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            placeholder="https://exemple.com/image.jpg"
+          />
+        </div>
+
+        <!-- Sélection des cibles -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">
+            Destinataires * ({{ selectedTargets.length }} sélectionné{{ selectedTargets.length > 1 ? 's' : '' }})
+          </label>
+
+          <!-- Filtres par type -->
+          <div class="flex gap-2 mb-4">
+            <button
+              type="button"
+              (click)="filterType = 'tous'"
+              [class.bg-blue-600]="filterType === 'tous'"
+              [class.bg-gray-200]="filterType !== 'tous'"
+              [class.text-white]="filterType === 'tous'"
+              [class.text-gray-700]="filterType !== 'tous'"
+              class="px-4 py-2 rounded-lg font-medium transition hover:opacity-80"
+            >
+              Tous
+            </button>
+            <button
+              type="button"
+              (click)="filterType = 'etudiant'"
+              [class.bg-green-600]="filterType === 'etudiant'"
+              [class.bg-gray-200]="filterType !== 'etudiant'"
+              [class.text-white]="filterType === 'etudiant'"
+              [class.text-gray-700]="filterType !== 'etudiant'"
+              class="px-4 py-2 rounded-lg font-medium transition hover:opacity-80"
+            >
+              Étudiants
+            </button>
+            <button
+              type="button"
+              (click)="filterType = 'personnel'"
+              [class.bg-purple-600]="filterType === 'personnel'"
+              [class.bg-gray-200]="filterType !== 'personnel'"
+              [class.text-white]="filterType === 'personnel'"
+              [class.text-gray-700]="filterType !== 'personnel'"
+              class="px-4 py-2 rounded-lg font-medium transition hover:opacity-80"
+            >
+              Personnel
+            </button>
+            <button
+              type="button"
+              (click)="filterType = 'groupe'"
+              [class.bg-orange-600]="filterType === 'groupe'"
+              [class.bg-gray-200]="filterType !== 'groupe'"
+              [class.text-white]="filterType === 'groupe'"
+              [class.text-gray-700]="filterType !== 'groupe'"
+              class="px-4 py-2 rounded-lg font-medium transition hover:opacity-80"
+            >
+              Groupes
+            </button>
+          </div>
+
+          <!-- Recherche -->
+          <div class="mb-4">
+            <input
+              type="text"
+              [(ngModel)]="searchQuery"
+              name="search"
+              placeholder="Rechercher un destinataire..."
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            />
+          </div>
+
+          <!-- Liste des cibles avec scroll -->
+          <div class="border border-gray-300 rounded-lg max-h-64 overflow-y-auto">
+            <div *ngIf="loading" class="p-4 text-center text-gray-500">
+              Chargement des destinataires...
+            </div>
+
+            <div *ngIf="!loading && getFilteredCibles().length === 0" class="p-4 text-center text-gray-500">
+              Aucun destinataire trouvé
+            </div>
+
+            <label
+              *ngFor="let cible of getFilteredCibles()"
+              class="flex items-center p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition"
+            >
+              <input
+                type="checkbox"
+                [checked]="isSelected(cible.id_cible)"
+                (change)="toggleTarget(cible.id_cible)"
+                class="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              />
+              <div class="ml-3 flex-1">
+                <div class="flex items-center gap-2">
+                      <span
+                        [class.bg-green-100]="cible.type === 'etudiant'"
+                        [class.text-green-800]="cible.type === 'etudiant'"
+                        [class.bg-purple-100]="cible.type === 'personnel'"
+                        [class.text-purple-800]="cible.type === 'personnel'"
+                        [class.bg-orange-100]="cible.type === 'groupe'"
+                        [class.text-orange-800]="cible.type === 'groupe'"
+                        class="px-2 py-1 text-xs font-semibold rounded"
+                      >
+                        {{ cible.type === 'etudiant' ? 'Étudiant' : cible.type === 'personnel' ? 'Personnel' : 'Groupe' }}
+                      </span>
+                  <span class="font-medium text-gray-900">{{ cible.label }}</span>
+                </div>
+                <p class="text-sm text-gray-500 mt-1">
+                  <span *ngIf="cible.numero">N°: {{ cible.numero }}</span>
+                  <span *ngIf="cible.matricule">Mat: {{ cible.matricule }}</span>
+                  <span *ngIf="cible.code">Code: {{ cible.code }}</span>
+                </p>
+              </div>
+            </label>
+          </div>
+
+          <!-- Actions rapides -->
+          <div class="flex gap-2 mt-3">
+            <button
+              type="button"
+              (click)="selectAll()"
+              class="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Tout sélectionner
+            </button>
+            <span class="text-gray-300">|</span>
+            <button
+              type="button"
+              (click)="deselectAll()"
+              class="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Tout désélectionner
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages de feedback -->
+        <div *ngIf="successMessage" class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div class="flex items-start">
+            <svg class="w-5 h-5 text-green-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <p class="ml-3 text-sm text-green-800">{{ successMessage }}</p>
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div class="flex items-start">
+            <svg class="w-5 h-5 text-red-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+            <p class="ml-3 text-sm text-red-800">{{ errorMessage }}</p>
+          </div>
+        </div>
+
+        <!-- Bouton d'envoi -->
+        <div class="flex gap-3">
+          <button
+            type="submit"
+            [disabled]="!notificationForm.valid || selectedTargets.length === 0 || sending"
+            class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+          >
+                <span *ngIf="!sending">
+                  Envoyer la notification ({{ selectedTargets.length }} destinataire{{ selectedTargets.length > 1 ? 's' : '' }})
+                </span>
+            <span *ngIf="sending">Envoi en cours...</span>
+          </button>
+          <button
+            type="button"
+            (click)="resetForm()"
+            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition"
+          >
+            Réinitialiser
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
