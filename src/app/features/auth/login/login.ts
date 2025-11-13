@@ -65,15 +65,16 @@ export class Login {
         this.loading.set(false);
         this.successMessage.set(`Bienvenue ${response.user_info.login} !`);
 
+        this.authService.setAuthData(response.user_info,response.access_token,this.rememberMe)
         // Stocker les infos utilisateur
-        if (this.rememberMe) {
-          localStorage.setItem('user', JSON.stringify(response.user_info));
-        } else {
-          sessionStorage.setItem('user', JSON.stringify(response.user_info));
-          sessionStorage.setItem('access_token', JSON.stringify(response.access_token));
-        }
+        // if (this.rememberMe) {
+        //   localStorage.setItem('user', JSON.stringify(response.user_info));
+        // } else {
+        //   sessionStorage.setItem('user', JSON.stringify(response.user_info));
+        //   sessionStorage.setItem('access_token', JSON.stringify(response.access_token));
+        // }
 
-        this.router.navigate(['/events']).then();
+        this.router.navigateByUrl('/events').then();
       },
       error: (err) => {
         this.loading.set(false);
