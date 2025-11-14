@@ -34,8 +34,12 @@ export class NotificationList implements OnInit{
 
   }
   ngOnInit(): void {
-    this.notificationService.getNotifications(0,this.itemsPerPage).
-    subscribe({
+    this.loadNotifications();
+  }
+  loadNotifications(){
+    this.notificationService.getNotifications(
+      (this.currentPage - 1) * this.itemsPerPage,
+      this.itemsPerPage,).subscribe({
       next: value => {
         this.totalItems = value.length < this.itemsPerPage
           ? (this.currentPage - 1) * this.itemsPerPage + value.length
@@ -47,14 +51,19 @@ export class NotificationList implements OnInit{
     })
   }
 
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadNotifications();
     }
   }
 
-  previousPage() {
+  nextPage() {
+    this.goToPage(this.currentPage + 1);
+  }
 
+  previousPage() {
+    this.goToPage(this.currentPage - 1);
   }
 
   onFilterChange() {
