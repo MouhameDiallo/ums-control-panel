@@ -15,4 +15,8 @@ export class NotificationService {
     let params = new HttpParams().set("skip",skip).set("limit",limit);
     return this.http.get<NotificationWithTargets[]>(this.resourcePath, {params: params})
   }
+
+  deleteNotification(id_notification: number) {
+    return this.http.delete(this.resourcePath+id_notification,)
+  }
 }

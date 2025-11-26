@@ -5,6 +5,7 @@ import {NotificationService} from '../../notification.service';
 import {NotificationWithTargets} from '../../../../core/models/notification.model';
 import {RouterLink} from '@angular/router';
 import {CibleModel} from '../../../../core/models/cible.model';
+import {NotificationDetails} from '../notification-details/notification-details';
 
 @Component({
   selector: 'app-notification-list',
@@ -14,7 +15,8 @@ import {CibleModel} from '../../../../core/models/cible.model';
     ReactiveFormsModule,
     FormsModule,
     RouterLink,
-    DatePipe
+    DatePipe,
+    NotificationDetails
   ],
   standalone: true,
   templateUrl: './notification-list.html',
@@ -28,6 +30,9 @@ export class NotificationList implements OnInit{
 
   totalItems: number = 0;
   totalPages: number = 1;
+  selectedNotification: NotificationWithTargets|null=null;
+
+  showDetails = false;
 
   constructor(private notificationService: NotificationService,
               private ref: ChangeDetectorRef) {
@@ -66,12 +71,36 @@ export class NotificationList implements OnInit{
     this.goToPage(this.currentPage - 1);
   }
 
-  onFilterChange() {
-
-  }
-
   getTypeOfRecipient(cibles: CibleModel[]){
     const set = new Set(cibles.map(target => target.type));
     return Array.from(set.values());
+  }
+
+  sendReminder(notification: NotificationWithTargets) {
+
+  }
+
+  display(notification: NotificationWithTargets) {
+    this.selectedNotification = notification;
+    this.showDetails = true;
+  }
+
+  edit(notification: NotificationWithTargets) {
+
+  }
+
+  delete(notification: NotificationWithTargets){
+    const conf =confirm("Voulez vous vraiment supprimer cette notification?");
+    if (conf){
+      this.notificationService.deleteNotification(notification.id_notification).subscribe({
+        next: () => {
+          console.log("Suppression validée");
+          this.loadNotifications();
+        },
+        error: err => {
+          console.error(err);
+        }
+      })
+    }
   }
 }

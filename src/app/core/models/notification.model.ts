@@ -14,5 +14,6 @@ export interface NotificationWithTargets{
   date_creation: Date
   titre: string
   message: string
+  media_url?: string
   cibles: CibleModel[]
 }

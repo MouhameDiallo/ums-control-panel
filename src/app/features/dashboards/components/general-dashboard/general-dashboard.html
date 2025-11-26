@@ -1,0 +1,227 @@
+<div class="min-h-screen bg-gray-50 p-6">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex items-center justify-center min-h-screen">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+      <p class="text-gray-600 text-lg">Chargement du dashboard...</p>
+    </div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!loading">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Dashboard Notifications</h1>
+      <p class="text-gray-600">Vue d'ensemble de l'activité des notifications universitaires</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 font-medium">Total Notifications</p>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.total_notifications }}</p>
+            <p class="text-xs text-green-600 mt-2">+{{ stats?.notifications_this_month }} ce mois</p>
+          </div>
+          <div class="text-4xl">📧</div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 font-medium">Total Cibles</p>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.total_cibles }}</p>
+            <p class="text-xs text-blue-600 mt-2">{{ stats?.total_etudiants }} étudiants</p>
+          </div>
+          <div class="text-4xl">👥</div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 font-medium">Aujourd'hui</p>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.notifications_today }}</p>
+            <p class="text-xs text-purple-600 mt-2">{{ stats?.notifications_this_week }} cette semaine</p>
+          </div>
+          <div class="text-4xl">📅</div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 font-medium">Événements</p>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.total_events }}</p>
+            <p class="text-xs text-orange-600 mt-2">{{ upcomingEvents.length }} à venir</p>
+          </div>
+          <div class="text-4xl">🎉</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <!-- Line Chart - Notifications par jour -->
+      <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">📈 Notifications des 14 derniers jours</h3>
+        <div class="h-64">
+          <div class="flex items-end justify-between h-full gap-2">
+            <div *ngFor="let day of notifParJour" class="flex-1 flex flex-col items-center justify-end group">
+              <div class="w-full bg-blue-500 rounded-t hover:bg-blue-600 transition-colors relative"
+                   [style.height]="getBarWidth(day.count, maxNotifPerDay)">
+                <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                  {{ day.count }}
+                </div>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">{{ formatDate(day.date) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie Chart - Notifications par type -->
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">🎯 Distribution par type</h3>
+        <div class="flex flex-col items-center justify-center h-64">
+          <div class="relative w-48 h-48">
+            <svg viewBox="0 0 100 100" class="transform -rotate-90">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#e5e7eb" stroke-width="20"/>
+              <ng-container *ngFor="let type of notifParType; let i = index">
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="40"
+                  fill="none"
+                  [attr.stroke]="getTypeColor(type.type)"
+                  stroke-width="20"
+                  [attr.stroke-dasharray]="(type.percentage / 100 * 251.2) + ' 251.2'"
+                  [attr.stroke-dashoffset]="i === 0 ? 0 : -(getNumber(i))"
+                  class="transition-all"/>
+              </ng-container>
+            </svg>
+          </div>
+          <div class="mt-4 space-y-2">
+            <div *ngFor="let type of notifParType" class="flex items-center justify-between gap-4">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full" [style.backgroundColor]="getTypeColor(type.type)"></div>
+                <span class="text-sm text-gray-700">{{ getTypeIcon(type.type) }} {{ type.type }}</span>
+              </div>
+              <span class="text-sm font-semibold text-gray-900">{{ type.percentage }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- Bar Chart - Top Utilisateurs -->
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">🏆 Top 5 Utilisateurs</h3>
+        <div class="space-y-4">
+          <div *ngFor="let user of topUsers; let i = index" class="group">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-sm text-gray-700 truncate max-w-xs">{{ i + 1 }}. {{ user.login }}</span>
+              <span class="text-sm font-semibold text-gray-900">{{ user.nombre_notifications }}</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+              <div class="bg-green-500 h-3 rounded-full transition-all group-hover:bg-green-600"
+                   [style.width]="getBarWidth(user.nombre_notifications, maxUserNotif)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Line Chart - Tendances -->
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">📊 Tendance sur 6 mois</h3>
+        <div class="space-y-4">
+          <div *ngFor="let trend of trends" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">{{ getTrendIcon(trend.variation_percentage) }}</span>
+              <div>
+                <p class="text-sm font-semibold text-gray-900">{{ trend.periode }}</p>
+                <p class="text-xs text-gray-600">{{ trend.notifications }} notifications</p>
+              </div>
+            </div>
+            <span class="text-sm font-semibold" [ngClass]="getTrendColor(trend.variation_percentage)">
+              {{ trend.variation_percentage > 0 ? '+' : '' }}{{ trend.variation_percentage }}%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tables and Lists Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Recent Notifications -->
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">🔔 Notifications récentes</h3>
+        <div class="space-y-4">
+          <div *ngFor="let notif of recentNotifs"
+               class="border-l-4 border-blue-500 pl-4 py-3 hover:bg-gray-50 transition-colors rounded-r cursor-pointer">
+            <div class="flex justify-between items-start mb-2">
+              <h4 class="font-semibold text-gray-900">{{ notif.titre }}</h4>
+              <span class="text-xs text-gray-500 whitespace-nowrap ml-2">{{ formatDateTime(notif.date_creation) }}</span>
+            </div>
+            <p class="text-sm text-gray-600 mb-2 line-clamp-2">{{ notif.message }}</p>
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-gray-500">Par: {{ notif.user_login }}</span>
+              <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
+                {{ notif.nombre_cibles }} cibles
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Events -->
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">📅 Événements à venir</h3>
+        <div class="space-y-4">
+          <div *ngFor="let event of upcomingEvents"
+               class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+            <div class="flex justify-between items-start mb-2">
+              <h4 class="font-semibold text-gray-900">{{ event.title }}</h4>
+              <span class="text-xs px-2 py-1 rounded-full font-medium whitespace-nowrap ml-2"
+                    [ngClass]="getCategoryColor(event.category)">
+                {{ event.category }}
+              </span>
+            </div>
+            <p class="text-sm text-gray-600 mb-3">{{ event.description }}</p>
+            <div class="flex items-center text-xs text-gray-500 gap-4 flex-wrap">
+              <span class="flex items-center gap-1">
+                📍 {{ event.location }}
+              </span>
+              <span class="flex items-center gap-1">
+                🗓️ {{ formatDate(event.date) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats Bar -->
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-md p-6 text-white">
+        <div class="text-3xl mb-2">🎓</div>
+        <p class="text-2xl font-bold">{{ stats?.total_etudiants }}</p>
+        <p class="text-sm text-blue-100">Étudiants</p>
+      </div>
+      <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-md p-6 text-white">
+        <div class="text-3xl mb-2">👨‍🏫</div>
+        <p class="text-2xl font-bold">{{ stats?.total_personnels }}</p>
+        <p class="text-sm text-green-100">Personnels</p>
+      </div>
+      <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-md p-6 text-white">
+        <div class="text-3xl mb-2">👥</div>
+        <p class="text-2xl font-bold">{{ stats?.total_groupes }}</p>
+        <p class="text-sm text-purple-100">Groupes</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -30,7 +30,6 @@
           <input
             type="text"
             [(ngModel)]="searchTerm"
-            (ngModelChange)="onFilterChange()"
             placeholder="Titre, description ou lieu..."
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
         </div>
@@ -61,16 +60,7 @@
           <tr *ngFor="let notification of notifications; let i = index"
               [class.bg-gray-50]="i % 2 === 0"
               [class.bg-white]="i % 2 !== 0">
-<!--            <td class="px-6 py-4">-->
-<!--              <img *ngIf="notification.image_url"-->
-<!--                   [src]="notification.image_url"-->
-<!--                   [alt]="notification.title"-->
-<!--                   class="w-16 h-16 object-cover rounded-lg" />-->
-<!--              <div *ngIf="!notification.image_url"-->
-<!--                   class="w-16 h-16 bg-gray-300 rounded-lg flex items-center justify-center">-->
-<!--                <i class="fas fa-image text-gray-500"></i>-->
-<!--              </div>-->
-<!--            </td>-->
+
             <td class="px-6 py-4">
               <div class="font-semibold text-gray-800">{{ notification.titre }}</div>
             </td>
@@ -93,20 +83,28 @@
 
             <td class="px-6 py-4">
               <div class="flex space-x-2">
-                <button class="text-purple-600 hover:text-purple-800" title="Notification de rappel">
+                <button
+                  (click)="sendReminder(notification)"
+                  class="text-purple-600 hover:text-purple-800"
+                  title="Notification de rappel">
                   <i class="fa-solid fa-bell"></i>
                 </button>
                 <button
+                  (click)="display(notification)"
                   class="text-blue-600 hover:text-blue-800"
                   title="Voir">
                   <i class="fas fa-eye"></i>
                 </button>
                 <button
+                  (click)="edit(notification)"
                   class="text-green-600 hover:text-green-800"
                   title="Éditer">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="text-red-600 hover:text-red-800" title="Supprimer">
+                <button
+                  (click)="delete(notification)"
+                  class="text-red-600 hover:text-red-800"
+                  title="Supprimer">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
@@ -140,3 +138,10 @@
 
   </div>
 </div>
+
+<app-notification-details
+  *ngIf="showDetails && selectedNotification"
+  [notification]="selectedNotification!"
+  (onSave)="loadNotifications()"
+  (onCancel)="showDetails = false; selectedNotification = null;">
+</app-notification-details>

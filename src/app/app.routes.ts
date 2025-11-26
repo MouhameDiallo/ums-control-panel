@@ -19,12 +19,16 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/events',
+        redirectTo: '/dashboards',
         pathMatch: 'full'
       },
       {
         path: 'events',
         loadChildren: () => import('./features/event-management/event.routes').then(m => m.EventRoutes)
+      },
+      {
+        path: 'dashboards',
+        loadChildren: () => import('./features/dashboards/dashboard.routes').then(m => m.DashboardRoutes)
       },
       {
         path: 'admin/users',
@@ -34,6 +38,10 @@ export const routes: Routes = [
       {
         path: 'admin/notifications',
         loadChildren: () => import('./features/push-notifications/notification.routes').then(m => m.NotificationRoutes)
+      },
+      {
+        path: 'admin/lieux',
+        loadChildren: () => import('./features/place-management/place.routes').then(m => m.PlaceRoutes)
       },
       // ... autres routes (profile, settings)
     ]

@@ -1,4 +1,5 @@
 export interface CibleModel{
+  nombre_membres?: number;
   id_cible: number
   identifiant: string
   type: string;
