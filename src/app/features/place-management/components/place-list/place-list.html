@@ -17,7 +17,7 @@
             {{ editMode() ? 'Modifier' : 'Nouvel' }} Lieu
           </h2>
 
-          <form (ngSubmit)="saveUser()" class="space-y-4">
+          <form (ngSubmit)="savePlace()" class="space-y-4">
             <!-- Nom -->
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-2">
@@ -109,8 +109,8 @@
               <input
                 type="text"
                 [(ngModel)]="searchTerm"
-                (input)="filterUsers()"
-                placeholder="Rechercher un utilisateur..."
+                (input)="filterPlaces()"
+                placeholder="Rechercher un lieu..."
                 class="w-full pl-12 pr-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
@@ -143,35 +143,35 @@
               </thead>
               <tbody class="divide-y divide-slate-200">
               <tr
-                *ngFor="let user of filteredPlaces(); let i = index"
+                *ngFor="let place of filteredPlaces(); let i = index"
                 class="hover:bg-slate-50 transition-colors"
-                [class.bg-blue-50]="selectedPlaceId() === user.id"
+                [class.bg-blue-50]="selectedPlaceId() === place.id"
               >
                 <td class="px-6 py-4">
                   <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold">
-                      {{ user.nom.charAt(0).toUpperCase() }}
+                      {{ place.nom.charAt(0).toUpperCase() }}
                     </div>
                     <div>
-                      <p class="font-semibold text-slate-800">{{ user.nom }}</p>
-                      <p class="text-xs text-slate-500">ID: {{ user.id }}</p>
+                      <p class="font-semibold text-slate-800">{{ place.nom }}</p>
+                      <p class="text-xs text-slate-500">ID: {{ place.id }}</p>
                     </div>
                   </div>
                 </td>
                 <td class="px-6 py-4">
                   <div>
-                    <p class="font-semibold text-slate-800">{{ user.latitude }}</p>
+                    <p class="font-semibold text-slate-800">{{ place.latitude }}</p>
                   </div>
                 </td>
                 <td class="px-6 py-4">
                   <div>
-                    <p class="font-semibold text-slate-800">{{ user.longitude }}</p>
+                    <p class="font-semibold text-slate-800">{{ place.longitude }}</p>
                   </div>
                 </td>
                 <td class="px-6 py-4 text-right">
                   <div class="flex gap-2 justify-end">
                     <button
-                      (click)="editPlace(user)"
+                      (click)="editPlace(place)"
                       class="p-2 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors"
                       title="Modifier"
                     >
@@ -180,7 +180,7 @@
                       </svg>
                     </button>
                     <button
-                      (click)="deletePlace(user.id)"
+                      (click)="deletePlace(place.id)"
                       class="p-2 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
                       title="Supprimer"
                     >
