@@ -3,9 +3,9 @@
     <!-- Header -->
     <div class="mb-8">
       <h1 class="text-4xl font-bold text-slate-800 mb-2">
-        <span class="text-blue-600">👥</span> Gestion des Utilisateurs
+        <span class="text-blue-600">👥</span> Gestion des Lieux
       </h1>
-      <p class="text-slate-600">Créez, modifiez et gérez vos utilisateurs</p>
+      <p class="text-slate-600">Créez, modifiez et gérez vos lieux affichés dans la map UMS</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -14,75 +14,59 @@
         <div class="bg-white rounded-2xl shadow-lg p-6 border border-slate-200">
           <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
             <span class="text-2xl">{{ editMode() ? '✏️' : '➕' }}</span>
-            {{ editMode() ? 'Modifier' : 'Nouvel' }} Utilisateur
+            {{ editMode() ? 'Modifier' : 'Nouvel' }} Lieu
           </h2>
 
           <form (ngSubmit)="saveUser()" class="space-y-4">
-            <!-- Login -->
+            <!-- Nom -->
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-2">
-                Identifiant
+                Nom
               </label>
               <input
                 type="text"
-                [(ngModel)]="userForm.login"
-                name="login"
+                [(ngModel)]="placeForm.nom"
+                name="nom"
                 required
                 class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="jean.dupont"
+                placeholder="ex: Bibliothèque Universitaire"
               />
             </div>
 
-            <!-- Password -->
+            <!-- Latitude -->
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-2">
-                Mot de passe
+                Latitude
               </label>
               <input
-                type="password"
-                [(ngModel)]="userForm.password"
-                name="password"
+                [(ngModel)]="placeForm.latitude"
+                name="latitude"
                 [required]="!editMode()"
                 class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="••••••••"
+                placeholder="00.00000"
               />
               <p class="text-xs text-slate-500 mt-1">
-                {{ editMode() ? 'Laissez vide pour ne pas modifier' : 'Minimum 8 caractères' }}
+                {{ editMode() ? 'Laissez vide pour ne pas modifier' : '' }}
               </p>
             </div>
 
-            <!-- Role -->
+            <!-- Longitude -->
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-2">
-                Rôle
+                Longitude
               </label>
-              <div class="flex gap-3">
-                <label class="flex-1 cursor-pointer">
-                  <input
-                    type="radio"
-                    [(ngModel)]="userForm.role"
-                    name="role"
-                    value="user"
-                    class="peer sr-only"
-                  />
-                  <div class="px-4 py-3 rounded-lg border-2 border-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all text-center font-medium">
-                    👤 User
-                  </div>
-                </label>
-                <label class="flex-1 cursor-pointer">
-                  <input
-                    type="radio"
-                    [(ngModel)]="userForm.role"
-                    name="role"
-                    value="admin"
-                    class="peer sr-only"
-                  />
-                  <div class="px-4 py-3 rounded-lg border-2 border-slate-300 peer-checked:border-purple-500 peer-checked:bg-purple-50 transition-all text-center font-medium">
-                    👑 Admin
-                  </div>
-                </label>
-              </div>
+              <input
+                [(ngModel)]="placeForm.longitude"
+                name="longitude"
+                [required]="!editMode()"
+                class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="00.0000"
+              />
+              <p class="text-xs text-slate-500 mt-1">
+                {{ editMode() ? 'Laissez vide pour ne pas modifier' : '' }}
+              </p>
             </div>
+
 
             <!-- Buttons -->
             <div class="flex gap-3 pt-2">
@@ -113,7 +97,7 @@
         </div>
       </div>
 
-      <!-- Liste des utilisateurs -->
+      <!-- Liste des lieux -->
       <div class="lg:col-span-2">
         <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
           <!-- Search -->
@@ -144,10 +128,13 @@
               <thead class="bg-slate-50 border-b border-slate-200">
               <tr>
                 <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">
-                  Utilisateur
+                  Lieu
                 </th>
                 <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">
-                  Rôle
+                  Latitude
+                </th>
+                <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">
+                  Longitude
                 </th>
                 <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 uppercase tracking-wider">
                   Actions
@@ -156,34 +143,35 @@
               </thead>
               <tbody class="divide-y divide-slate-200">
               <tr
-                *ngFor="let user of filteredUsers(); let i = index"
+                *ngFor="let user of filteredPlaces(); let i = index"
                 class="hover:bg-slate-50 transition-colors"
-                [class.bg-blue-50]="selectedUserId() === user.id_user"
+                [class.bg-blue-50]="selectedPlaceId() === user.id"
               >
                 <td class="px-6 py-4">
                   <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold">
-                      {{ user.login.charAt(0).toUpperCase() }}
+                      {{ user.nom.charAt(0).toUpperCase() }}
                     </div>
                     <div>
-                      <p class="font-semibold text-slate-800">{{ user.login }}</p>
-                      <p class="text-xs text-slate-500">ID: {{ user.id_user }}</p>
+                      <p class="font-semibold text-slate-800">{{ user.nom }}</p>
+                      <p class="text-xs text-slate-500">ID: {{ user.id }}</p>
                     </div>
                   </div>
                 </td>
                 <td class="px-6 py-4">
-                        <span
-                          [class]="'inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ' +
-                            (user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700')"
-                        >
-                          {{ user.role === 'admin' ? '👑' : '👤' }}
-                          {{ user.role === 'admin' ? 'Administrateur' : 'Utilisateur' }}
-                        </span>
+                  <div>
+                    <p class="font-semibold text-slate-800">{{ user.latitude }}</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div>
+                    <p class="font-semibold text-slate-800">{{ user.longitude }}</p>
+                  </div>
                 </td>
                 <td class="px-6 py-4 text-right">
                   <div class="flex gap-2 justify-end">
                     <button
-                      (click)="editUser(user)"
+                      (click)="editPlace(user)"
                       class="p-2 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors"
                       title="Modifier"
                     >
@@ -192,7 +180,7 @@
                       </svg>
                     </button>
                     <button
-                      (click)="deleteUser(user.id_user)"
+                      (click)="deletePlace(user.id)"
                       class="p-2 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
                       title="Supprimer"
                     >
@@ -207,9 +195,9 @@
             </table>
 
             <!-- Empty State -->
-            <div *ngIf="filteredUsers().length === 0" class="p-12 text-center">
+            <div *ngIf="filteredPlaces().length === 0" class="p-12 text-center">
               <div class="text-6xl mb-4">🔍</div>
-              <p class="text-slate-600 font-medium">Aucun utilisateur trouvé</p>
+              <p class="text-slate-600 font-medium">Aucun lieu trouvé</p>
               <p class="text-slate-400 text-sm mt-1">Essayez une autre recherche</p>
             </div>
           </div>
@@ -217,10 +205,10 @@
           <!-- Footer -->
           <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
             <p class="text-sm text-slate-600">
-              <span class="font-semibold">{{ filteredUsers().length }}</span> utilisateur(s)
+              <span class="font-semibold">{{ filteredPlaces().length }}</span> lieu(x)
             </p>
             <button
-              (click)="loadUsers()"
+              (click)="loadPlaces()"
               class="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

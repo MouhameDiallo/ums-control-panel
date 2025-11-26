@@ -14,4 +14,12 @@ export class EventService {
             limit: number=10){
     return this.http.get<UniversityEvent[]>(this.resourcePath)
   }
+
+  createEvent(event: Partial<UniversityEvent>){
+    return this.http.post<UniversityEvent>(this.resourcePath, event);
+  }
+
+  updateEvent(id: number, eventToUpdate: UniversityEvent) {
+    return this.http.put<UniversityEvent>(this.resourcePath+id, eventToUpdate);
+  }
 }

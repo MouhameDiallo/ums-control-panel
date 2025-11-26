@@ -1,0 +1,122 @@
+<div class="notification-detail-container">
+  <div class="notification-header">
+    <h2>Détails de la notification #{{ notification.id_notification }}</h2>
+    <button
+      *ngIf="!isEditing"
+      class="btn-edit"
+      (click)="toggleEdit()">
+      ✏️ Modifier
+    </button>
+  </div>
+
+  <form [formGroup]="notificationForm" (ngSubmit)="save()">
+    <!-- Informations générales -->
+    <div class="info-section">
+      <h3>Informations générales</h3>
+
+      <div class="info-row">
+        <label>ID Utilisateur:</label>
+        <span>{{ notification.id_user }}</span>
+      </div>
+
+      <div class="info-row">
+        <label>Date de création:</label>
+        <span>{{ notification.date_creation | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+    </div>
+
+    <!-- Champs éditables -->
+    <div class="editable-section">
+      <h3>Contenu de la notification</h3>
+
+      <div class="form-group">
+        <label for="titre">Titre *</label>
+        <input
+          *ngIf="isEditing"
+          id="titre"
+          type="text"
+          formControlName="titre"
+          class="form-control"
+          [class.invalid]="notificationForm.get('titre')?.invalid && notificationForm.get('titre')?.touched">
+        <div *ngIf="!isEditing" class="readonly-value">
+          {{ notification.titre }}
+        </div>
+        <div
+          *ngIf="isEditing && notificationForm.get('titre')?.invalid && notificationForm.get('titre')?.touched"
+          class="error-message">
+          Le titre est requis (max 200 caractères)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message *</label>
+        <textarea
+          *ngIf="isEditing"
+          id="message"
+          formControlName="message"
+          class="form-control"
+          rows="5"
+          [class.invalid]="notificationForm.get('message')?.invalid && notificationForm.get('message')?.touched">
+        </textarea>
+        <div *ngIf="!isEditing" class="readonly-value">
+          {{ notification.message }}
+        </div>
+        <div
+          *ngIf="isEditing && notificationForm.get('message')?.invalid && notificationForm.get('message')?.touched"
+          class="error-message">
+          Le message est requis
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="media_url">URL du média</label>
+        <input
+          *ngIf="isEditing"
+          id="media_url"
+          type="text"
+          formControlName="media_url"
+          class="form-control"
+          placeholder="https://exemple.com/image.jpg">
+        <div *ngIf="!isEditing" class="readonly-value">
+          {{ notification.media_url || 'Aucun média' }}
+        </div>
+        <div *ngIf="notification.media_url && !isEditing" class="media-preview">
+          <img [src]="notification.media_url" alt="Aperçu du média" (error)="$event.target.style.display='none'">
+        </div>
+      </div>
+    </div>
+
+    <!-- Cibles -->
+    <div class="cibles-section">
+      <h3>Cibles ({{ notification.cibles.length }})</h3>
+      <div class="cibles-list">
+        <div *ngFor="let cible of notification.cibles" class="cible-card">
+          <span class="cible-icon">{{ getCibleIcon(cible.type) }}</span>
+          <div class="cible-info">
+            <div class="cible-type">{{ cible.type }}</div>
+            <div class="cible-label">{{ getCibleLabel(cible) }}</div>
+            <div *ngIf="cible.nombre_membres" class="cible-membres">
+              {{ cible.nombre_membres }} membres
+            </div>
+          </div>
+        </div>
+        <div *ngIf="notification.cibles.length === 0" class="no-cibles">
+          Aucune cible définie
+        </div>
+      </div>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div *ngIf="isEditing" class="actions">
+      <button type="button" class="btn-cancel" (click)="cancel()">
+        Annuler
+      </button>
+      <button
+        type="submit"
+        class="btn-save"
+        [disabled]="notificationForm.invalid">
+        💾 Enregistrer
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,37 +1,47 @@
 import { Routes } from '@angular/router';
 import {MainLayout} from './shared/components/main-layout/main-layout';
+import {Login} from './features/auth/login/login';
+import {adminGuard, authGuard} from './core/auth/auth-guard';
 
 
 export const routes: Routes = [
   // 1. Routes d'Authentification (sans Sidebar)
-  // {
-  //   path: 'auth',
-  //   loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES)
-  // },
+  {
+    path: 'login',
+    component: Login
+  },
 
   // 2. Routes Protégées (avec Sidebar/MainLayout)
   {
     path: '', // Ceci est le chemin de base (ex: /events, /admin/...)
     component: MainLayout, // Le composant de layout est le parent
-    // Protéger ces routes ici avec AuthGuard
-    // canActivate: [AuthGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: '',
-        redirectTo: 'events',
+        redirectTo: '/dashboards',
         pathMatch: 'full'
       },
       {
         path: 'events',
         loadChildren: () => import('./features/event-management/event.routes').then(m => m.EventRoutes)
       },
-      // {
-      //   path: 'admin/users',
-      //   loadChildren: () => import('./features/user-management/user-management.routes').then(m => m.USER_ROUTES)
-      // },
+      {
+        path: 'dashboards',
+        loadChildren: () => import('./features/dashboards/dashboard.routes').then(m => m.DashboardRoutes)
+      },
+      {
+        path: 'admin/users',
+        canActivate: [adminGuard],
+        loadChildren: () => import('./features/user-management/user.routes').then(m => m.UserRoutes)
+      },
       {
         path: 'admin/notifications',
         loadChildren: () => import('./features/push-notifications/notification.routes').then(m => m.NotificationRoutes)
+      },
+      {
+        path: 'admin/lieux',
+        loadChildren: () => import('./features/place-management/place.routes').then(m => m.PlaceRoutes)
       },
       // ... autres routes (profile, settings)
     ]
