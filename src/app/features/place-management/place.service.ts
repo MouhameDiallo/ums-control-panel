@@ -15,7 +15,7 @@ export class PlaceService{
     return this.http.get<PlaceModel[]>(this.resourcePath, {params: params})
   }
 
-  deleteUser(id: number) {
+  deletePlace(id: number) {
     return this.http.delete(this.resourcePath+id,);
   }
 

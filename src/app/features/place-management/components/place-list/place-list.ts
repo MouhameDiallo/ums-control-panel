@@ -48,13 +48,13 @@ export class PlaceList implements OnInit {
       },
       error: (err) => {
         console.error('Erreur lors du chargement:', err);
-        this.showAlert('Erreur lors du chargement des utilisateurs', 'error');
+        this.showAlert('Erreur lors du chargement des lieux', 'error');
         this.loading.set(false);
       }
     });
   }
 
-  filterUsers() {
+  filterPlaces() {
     const term = this.searchTerm.toLowerCase();
     const filtered = this.places().filter(place =>
       place.nom.toLowerCase().includes(term)
@@ -62,7 +62,7 @@ export class PlaceList implements OnInit {
     this.filteredPlaces.set(filtered);
   }
 
-  saveUser() {
+  savePlace() {
     if (!this.placeForm.nom || (!this.placeForm.latitude && !this.editMode()) || (!this.placeForm.longitude && !this.editMode())) {
       this.showAlert('Veuillez remplir tous les champs requis', 'error');
       return;
@@ -90,7 +90,7 @@ export class PlaceList implements OnInit {
       // Create
       this.placeService.createPlace(payload).subscribe({
         next: () => {
-          this.showAlert('Utilisateur créé avec succès', 'success');
+          this.showAlert('Lieu créé avec succès', 'success');
           this.loadPlaces();
           this.resetForm();
         },
@@ -106,7 +106,7 @@ export class PlaceList implements OnInit {
       return;
     }
 
-    this.placeService.deleteUser(id).subscribe({
+    this.placeService.deletePlace(id).subscribe({
       next: () => {
         this.showAlert('Lieu supprimé avec succès', 'success');
         this.loadPlaces();
