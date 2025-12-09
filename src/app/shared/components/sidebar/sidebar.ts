@@ -22,8 +22,9 @@ export class Sidebar {
     { label: 'Gestion des Événements', route: '/events', icon: '📅' },
     { label: 'Gestion des Utilisateurs', route: '/admin/users', icon: '👥' },
     { label: 'Envoyer Notification Push', route: '/admin/notifications', icon: '🔔' },
-    { label: 'Gestion lieux', route: '/admin/lieux', icon: '📍' },
+    { label: 'Gestion lieux', route: '/admin/lieux', icon: '🕌' },
     { label: 'Gestion Doc. RAG', route: '/admin/chatbot/upload', icon: '📂' },
+
   ];
 
   logout() {
