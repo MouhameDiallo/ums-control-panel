@@ -36,6 +36,11 @@ export const routes: Routes = [
         loadChildren: () => import('./features/user-management/user.routes').then(m => m.UserRoutes)
       },
       {
+        path: 'admin/chatbot',
+        canActivate: [adminGuard],
+        loadChildren: () => import('./features/chatbot-management/chatbot.routes').then(m => m.ChatbotRoutes)
+      },
+      {
         path: 'admin/notifications',
         loadChildren: () => import('./features/push-notifications/notification.routes').then(m => m.NotificationRoutes)
       },
