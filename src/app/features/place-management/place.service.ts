@@ -8,10 +8,11 @@ import {PlaceModel} from '../../core/models/place.model';
 })
 export class PlaceService{
   http = inject(HttpClient);
-  resourcePath = environment.apiUrl+"lieux/";
+  resourcePath = "http://10.152.59.131:8080/api/locations/";
 
   getPlaces(skip: number = 0, limit: number=30) {
-    let params = new HttpParams().set("skip",skip).set("limit",limit);
+    let params = new HttpParams().set("withNull",true);
+    // let params = new HttpParams().set("skip",skip).set("limit",limit);
     return this.http.get<PlaceModel[]>(this.resourcePath, {params: params})
   }
 
@@ -19,8 +20,8 @@ export class PlaceService{
     return this.http.delete(this.resourcePath+id,);
   }
 
-  updatePlace(id: number, payload: any) {
-    return this.http.put<PlaceModel>(this.resourcePath+id,payload);
+  updatePlace(id: number,type:string, payload: any) {
+    return this.http.patch<PlaceModel>(`${this.resourcePath}${type}/${id}/coordinates`,payload);
   }
 
   createPlace(payload: any) {

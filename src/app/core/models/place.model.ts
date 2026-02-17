@@ -1,6 +1,8 @@
 export interface PlaceModel{
   id: number;
-  nom: string;
+  libelle?: string;
+  codification?: string;
+  type: string;
   latitude: number;
   longitude: number;
 }

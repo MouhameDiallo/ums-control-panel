@@ -8,7 +8,7 @@ export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService)
   const router = inject(Router);
   const accessToken = authService.token()
-  if (accessToken){
+  if (accessToken && !req.url.startsWith("http://10.152.59.131:8080/")){
     req = req.clone(
       {
         headers: req.headers.set('Authorization', `Bearer ${accessToken}`),

@@ -1,7 +1,7 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {PlaceModel} from '../../../../core/models/place.model';
 import {PlaceService} from '../../place.service';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 @Component({
@@ -9,7 +9,8 @@ import {FormsModule} from '@angular/forms';
   imports: [
     NgIf,
     NgForOf,
-    FormsModule
+    FormsModule,
+    TitleCasePipe
   ],
   standalone: true,
   templateUrl: './place-list.html',
@@ -21,10 +22,11 @@ export class PlaceList implements OnInit {
   loading = signal(false);
   editMode = signal(false);
   selectedPlaceId = signal<number | null>(null);
+  selectedPlaceType = signal<string | null>(null);
   searchTerm = '';
 
   placeForm: Partial<PlaceModel> = {
-    nom: undefined,
+    libelle: undefined,
     latitude: undefined,
     longitude: undefined
   };
@@ -42,6 +44,7 @@ export class PlaceList implements OnInit {
     this.loading.set(true);
     this.placeService.getPlaces().subscribe({
       next: (data) => {
+        console.log(data);
         this.places.set(data);
         this.filteredPlaces.set(data);
         this.loading.set(false);
@@ -57,26 +60,27 @@ export class PlaceList implements OnInit {
   filterPlaces() {
     const term = this.searchTerm.toLowerCase();
     const filtered = this.places().filter(place =>
-      place.nom.toLowerCase().includes(term)
+      place.codification!.toLowerCase().includes(term)
     );
     this.filteredPlaces.set(filtered);
   }
 
   savePlace() {
-    if (!this.placeForm.nom || (!this.placeForm.latitude && !this.editMode()) || (!this.placeForm.longitude && !this.editMode())) {
+    if (!this.placeForm.libelle || (!this.placeForm.latitude && !this.editMode()) || (!this.placeForm.longitude && !this.editMode())) {
       this.showAlert('Veuillez remplir tous les champs requis', 'error');
       return;
     }
 
     const payload: any = {
-      nom: this.placeForm.nom,
+      // libelle: this.placeForm.libelle,
+      // codification: this.placeForm.codification,
       latitude: this.placeForm.latitude,
       longitude: this.placeForm.longitude,
     };
 
-    if (this.editMode() && this.selectedPlaceId()) {
+    if (this.editMode() && this.selectedPlaceId() && this.selectedPlaceType()) {
       // Update
-      this.placeService.updatePlace(this.selectedPlaceId()!,payload).subscribe({
+      this.placeService.updatePlace(this.selectedPlaceId()!, this.selectedPlaceType()!,payload).subscribe({
         next: () => {
           this.showAlert('Utilisateur modifié avec succès', 'success');
           this.loadPlaces();
@@ -124,8 +128,9 @@ export class PlaceList implements OnInit {
   resetForm() {
     this.editMode.set(false);
     this.selectedPlaceId.set(null);
+    this.selectedPlaceType.set(null);
     this.placeForm = {
-      nom: undefined,
+      libelle: undefined,
       latitude: undefined,
       longitude: undefined
     }
@@ -141,11 +146,16 @@ export class PlaceList implements OnInit {
     console.log("Hello");
     this.editMode.set(true);
     this.selectedPlaceId.set(place.id);
+    this.selectedPlaceType.set(place.type);
     this.placeForm = {
-      nom: place.nom,
+      libelle: place.libelle,
       latitude: place.latitude,
       longitude: place.longitude
     };
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  protected getCorrectWidth() {
+    return this.selectedPlaceType()?"lg:col-span-2": "lg:col-span-3";
   }
 }
