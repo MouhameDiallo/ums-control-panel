@@ -10,6 +10,10 @@ export const routes: Routes = [
     path: 'login',
     component: Login
   },
+  {
+    path: 'set-password',
+    loadComponent: () => import('./features/set-password/set-password.component').then(m => m.SetPasswordComponent)
+  },
 
   // 2. Routes Protégées (avec Sidebar/MainLayout)
   {
@@ -47,6 +51,11 @@ export const routes: Routes = [
       {
         path: 'admin/lieux',
         loadChildren: () => import('./features/place-management/place.routes').then(m => m.PlaceRoutes)
+      },
+      {
+        path: 'admin/partenaires',
+        canActivate: [adminGuard],
+        loadChildren: () => import('./features/partenaire-management/partenaire.routes').then(m => m.PartenaireRoutes)
       },
       // ... autres routes (profile, settings)
     ]

@@ -65,4 +65,11 @@ export class AuthService{
   login(credentials: any){
     return this.http.post<LoginResponse>(this.resourcePath+"login/", credentials)
   }
+
+  setPassword(token: string, password: string) {
+    return this.http.post<{ message: string }>(
+      'http://localhost:8090/api/v1/auth/set-password',
+      { token, password }
+    );
+  }
 }

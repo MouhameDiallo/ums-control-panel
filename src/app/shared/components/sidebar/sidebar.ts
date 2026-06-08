@@ -24,9 +24,9 @@ export class Sidebar {
     { label: 'Envoyer Notification Push', route: '/admin/notifications', icon: '🔔' },
     { label: 'Gestion lieux', route: '/admin/lieux', icon: '🕌' },
     { label: 'Gestion Doc. RAG', route: '/admin/chatbot/upload', icon: '📂' },
+    { label: 'Partenaires & Services', route: '/admin/partenaires', icon: '🤝' },
 
   ];
-
   logout() {
     this.authService.logout();
   }

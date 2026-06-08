@@ -21,6 +21,7 @@ export class PlaceList implements OnInit {
   filteredPlaces = signal<PlaceModel[]>([]);
   loading = signal(false);
   editMode = signal(false);
+  showForm = signal(false);
   selectedPlaceId = signal<number | null>(null);
   selectedPlaceType = signal<string | null>(null);
   searchTerm = '';
@@ -123,6 +124,7 @@ export class PlaceList implements OnInit {
 
   cancelEdit() {
     this.resetForm();
+    this.toggleForm();
   }
 
   resetForm() {
@@ -136,6 +138,16 @@ export class PlaceList implements OnInit {
     }
   }
 
+  toggleForm(){
+    const showForm  = !this.showForm()
+    this.showForm.set(showForm)
+  }
+
+  showAddPlaceForm(){
+    this.resetForm()
+    this.showForm.set(true)
+  }
+
   showAlert(message: string, type: 'success' | 'error') {
     this.alertMessage.set(message);
     this.alertType.set(type);
@@ -143,12 +155,12 @@ export class PlaceList implements OnInit {
   }
 
   editPlace(place: PlaceModel) {
-    console.log("Hello");
     this.editMode.set(true);
+    this.showForm.set(true);
     this.selectedPlaceId.set(place.id);
     this.selectedPlaceType.set(place.type);
     this.placeForm = {
-      libelle: place.libelle,
+      libelle: place.codification,
       latitude: place.latitude,
       longitude: place.longitude
     };
