@@ -12,7 +12,12 @@ export class EventService {
 
   getEvents(skip: number = 0,
             limit: number=10){
-    return this.http.get<UniversityEvent[]>(this.resourcePath)
+    return this.http.get<UniversityEvent[]>(this.resourcePath, {
+      params: {
+        skip: skip,
+        limit: limit
+      }
+    })
   }
 
   createEvent(event: Partial<UniversityEvent>){
@@ -21,5 +26,9 @@ export class EventService {
 
   updateEvent(id: number, eventToUpdate: UniversityEvent) {
     return this.http.put<UniversityEvent>(this.resourcePath+id, eventToUpdate);
+  }
+
+  deleteEvent(id: number) {
+    return this.http.delete<UniversityEvent>(this.resourcePath+id);
   }
 }

@@ -4,7 +4,7 @@
     <form [formGroup]="eventForm" class="p-6">
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">
-          <i class="fas fa-plus-circle mr-2 text-indigo-600"></i>
+          <i class="fas fa-plus-circle mr-2 text-ucad-600"></i>
           {{eventToEdit?"Modifier un ":"Créer un nouvel "}} événement
         </h2>
         <button
@@ -22,7 +22,7 @@
           <input
             type="text"
             formControlName="title"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500"
             placeholder="Titre de l'événement" />
         </div>
 
@@ -33,7 +33,7 @@
           <textarea
             formControlName="description"
             rows="3"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500"
             placeholder="Description de l'événement"></textarea>
         </div>
 
@@ -45,7 +45,7 @@
             <input
               type="datetime-local"
               formControlName="date"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500" />
           </div>
 
           <div>
@@ -54,7 +54,7 @@
             </label>
             <select
               formControlName="category"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500">
               <option *ngFor="let cat of categories" [value]="cat" [disabled]="cat === 'Tous'">
                 {{ cat }}
               </option>
@@ -69,7 +69,7 @@
           <input
             type="text"
             formControlName="location"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500"
             placeholder="Lieu de l'événement" />
         </div>
 
@@ -80,7 +80,7 @@
           <input
             type="url"
             formControlName="image_url"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500"
             placeholder="https://example.com/image.jpg" />
         </div>
 
@@ -92,7 +92,7 @@
           </button>
           <button
             (click)="eventSubmit()"
-            class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold">
+            class="px-6 py-2 bg-ucad-600 hover:bg-ucad-700 text-white rounded-lg font-semibold">
             <i class="fas fa-save mr-2"></i>
             {{eventToEdit?"Modifier":"Créer"}} l'événement
           </button>

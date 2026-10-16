@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NotificationService} from '../../notification.service';
+import {NotificationService} from '../../services/notification.service';
 import {NotificationWithTargets} from '../../../../core/models/notification.model';
 import {RouterLink} from '@angular/router';
 import {CibleModel} from '../../../../core/models/cible.model';
@@ -85,9 +85,16 @@ export class NotificationList implements OnInit{
     this.showDetails = true;
   }
 
-  edit(notification: NotificationWithTargets) {
-
+  closeDetails() {
+    this.showDetails = false;
+    this.selectedNotification = null;
   }
+
+  onDetailsSave() {
+    this.loadNotifications();
+    this.closeDetails();
+  }
+
 
   delete(notification: NotificationWithTargets){
     const conf =confirm("Voulez vous vraiment supprimer cette notification?");

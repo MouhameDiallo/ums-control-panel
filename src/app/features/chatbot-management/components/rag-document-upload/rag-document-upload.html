@@ -26,8 +26,8 @@
     <div
       class="border-2 border-dashed rounded-xl p-8 text-center transition-all"
       [ngClass]="{
-        'border-blue-500 bg-blue-50': isDragging,
-        'border-gray-300 hover:border-blue-400': !isDragging && !selectedFile,
+        'border-ucad-500 bg-ucad-50': isDragging,
+        'border-gray-300 hover:border-ucad-400': !isDragging && !selectedFile,
         'border-green-500 bg-green-50': selectedFile && !isDragging
       }"
       (dragover)="onDragOver($event)"
@@ -46,7 +46,7 @@
             accept="application/pdf"
             (change)="onFileSelected($event)"
             class="hidden">
-          <span class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg cursor-pointer transition-colors inline-block">
+          <span class="bg-ucad-500 hover:bg-ucad-600 text-white font-semibold py-3 px-6 rounded-lg cursor-pointer transition-colors inline-block">
             Parcourir les fichiers
           </span>
         </label>
@@ -69,7 +69,7 @@
         <h3 class="text-xl font-semibold text-gray-900 mb-4">Upload en cours...</h3>
         <div class="w-full bg-gray-200 rounded-full h-4 mb-2 overflow-hidden">
           <div
-            class="bg-blue-500 h-4 rounded-full transition-all duration-300 flex items-center justify-center"
+            class="bg-ucad-500 h-4 rounded-full transition-all duration-300 flex items-center justify-center"
             [style.width]="uploadProgress + '%'">
             <span class="text-xs text-white font-semibold" *ngIf="uploadProgress > 10">
               {{ uploadProgress }}%
@@ -90,7 +90,7 @@
           type="text"
           [(ngModel)]="documentTitle"
           placeholder="Ex: Guide d'utilisation 2024"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500 focus:border-transparent outline-none transition-all">
       </div>
 
       <div>
@@ -101,7 +101,7 @@
           [(ngModel)]="documentDescription"
           rows="3"
           placeholder="Décrivez brièvement le contenu de ce document..."
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none">
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500 focus:border-transparent outline-none transition-all resize-none">
         </textarea>
       </div>
 
@@ -115,22 +115,22 @@
             [(ngModel)]="currentTag"
             (keyup.enter)="addTag()"
             placeholder="Ajouter un tag..."
-            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
+            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500 focus:border-transparent outline-none transition-all">
           <button
             (click)="addTag()"
             [disabled]="!currentTag.trim()"
-            class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+            class="bg-ucad-500 hover:bg-ucad-600 disabled:bg-gray-300 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
             Ajouter
           </button>
         </div>
         <div class="flex flex-wrap gap-2">
           <span
             *ngFor="let tag of documentTags"
-            class="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+            class="inline-flex items-center gap-2 bg-ucad-100 text-ucad-800 px-3 py-1 rounded-full text-sm font-medium">
             {{ tag }}
             <button
               (click)="removeTag(tag)"
-              class="hover:text-blue-900 transition-colors">
+              class="hover:text-ucad-900 transition-colors">
               ×
             </button>
           </span>
@@ -209,12 +209,12 @@
   </div>
 
   <!-- Information sur le RAG -->
-  <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-6">
+  <div class="mt-6 bg-ucad-50 border border-ucad-200 rounded-lg p-6">
     <div class="flex items-start gap-3">
       <span class="text-2xl">💡</span>
       <div>
-        <h4 class="font-semibold text-blue-900 mb-2">À propos du RAG (Retrieval-Augmented Generation)</h4>
-        <p class="text-sm text-blue-800">
+        <h4 class="font-semibold text-ucad-900 mb-2">À propos du RAG (Retrieval-Augmented Generation)</h4>
+        <p class="text-sm text-ucad-800">
           Les documents PDF uploadés sont automatiquement analysés et indexés. Le chatbot utilisera ces informations
           pour répondre aux questions en se basant sur le contenu de vos documents. Plus vous ajoutez de documents
           pertinents, plus les réponses du chatbot seront précises et contextuelles.

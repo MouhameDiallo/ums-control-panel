@@ -1,7 +1,7 @@
 <div class="flex flex-col h-full p-4 bg-white shadow-xl">
 
   <div class="mb-8 p-2 border-b border-gray-100">
-    <h1 class="text-2xl font-extrabold text-indigo-700 tracking-wider">
+    <h1 class="text-2xl font-extrabold text-ucad-700 tracking-wider">
       UMS Admin
     </h1>
   </div>
@@ -10,9 +10,9 @@
     <a
       *ngFor="let item of navItems"
       [routerLink]="item.route"
-      routerLinkActive="bg-indigo-500 text-white shadow-lg"
+      routerLinkActive="bg-ucad-500 text-white shadow-lg"
       [routerLinkActiveOptions]="{exact: true}"
-      class="flex items-center p-3 text-gray-700 rounded-lg transition-colors duration-150 hover:bg-indigo-100 hover:text-indigo-700"
+      class="flex items-center p-3 text-gray-700 rounded-lg transition-colors duration-150 hover:bg-ucad-100 hover:text-ucad-700"
     >
       <span class="mr-3 text-xs">{{ item.icon }}</span>
       <span class="font-medium text-sm">{{ item.label }}</span>

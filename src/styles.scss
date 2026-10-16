@@ -1,2 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
+/* Charte graphique UCAD (Université Cheikh Anta Diop de Dakar) */
+@theme {
+  --color-ucad-50: #eaf2fb;
+  --color-ucad-100: #cfe3f6;
+  --color-ucad-200: #9fc7ed;
+  --color-ucad-300: #6aa8e0;
+  --color-ucad-400: #3a87d0;
+  --color-ucad-500: #1b6bbd;
+  --color-ucad-600: #0d4c92;
+  --color-ucad-700: #0a3c74;
+  --color-ucad-800: #082d57;
+  --color-ucad-900: #0b1f3a;
+
+  --font-sans: "Roboto", "Helvetica Neue", Arial, sans-serif;
+  --font-heading: "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+}

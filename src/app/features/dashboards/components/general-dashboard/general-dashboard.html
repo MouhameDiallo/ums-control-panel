@@ -2,7 +2,7 @@
   <!-- Loading State -->
   <div *ngIf="loading" class="flex items-center justify-center min-h-screen">
     <div class="text-center">
-      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-ucad-600 mx-auto mb-4"></div>
       <p class="text-gray-600 text-lg">Chargement du dashboard...</p>
     </div>
   </div>
@@ -17,7 +17,7 @@
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-ucad-500 hover:shadow-lg transition-shadow">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-600 font-medium">Total Notifications</p>
@@ -33,7 +33,7 @@
           <div>
             <p class="text-sm text-gray-600 font-medium">Total Cibles</p>
             <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats?.total_cibles }}</p>
-            <p class="text-xs text-blue-600 mt-2">{{ stats?.total_etudiants }} étudiants</p>
+            <p class="text-xs text-ucad-600 mt-2">{{ stats?.total_etudiants }} étudiants</p>
           </div>
           <div class="text-4xl">👥</div>
         </div>
@@ -70,7 +70,7 @@
         <div class="h-64">
           <div class="flex items-end justify-between h-full gap-2">
             <div *ngFor="let day of notifParJour" class="flex-1 flex flex-col items-center justify-end group">
-              <div class="w-full bg-blue-500 rounded-t hover:bg-blue-600 transition-colors relative"
+              <div class="w-full bg-ucad-500 rounded-t hover:bg-ucad-600 transition-colors relative"
                    [style.height]="getBarWidth(day.count, maxNotifPerDay)">
                 <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
                   {{ day.count }}
@@ -162,7 +162,7 @@
         <h3 class="text-lg font-semibold text-gray-900 mb-4">🔔 Notifications récentes</h3>
         <div class="space-y-4">
           <div *ngFor="let notif of recentNotifs"
-               class="border-l-4 border-blue-500 pl-4 py-3 hover:bg-gray-50 transition-colors rounded-r cursor-pointer">
+               class="border-l-4 border-ucad-500 pl-4 py-3 hover:bg-gray-50 transition-colors rounded-r cursor-pointer">
             <div class="flex justify-between items-start mb-2">
               <h4 class="font-semibold text-gray-900">{{ notif.titre }}</h4>
               <span class="text-xs text-gray-500 whitespace-nowrap ml-2">{{ formatDateTime(notif.date_creation) }}</span>
@@ -170,7 +170,7 @@
             <p class="text-sm text-gray-600 mb-2 line-clamp-2">{{ notif.message }}</p>
             <div class="flex items-center justify-between text-xs">
               <span class="text-gray-500">Par: {{ notif.user_login }}</span>
-              <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
+              <span class="bg-ucad-100 text-ucad-800 px-2 py-1 rounded-full font-medium">
                 {{ notif.nombre_cibles }} cibles
               </span>
             </div>
@@ -207,10 +207,10 @@
 
     <!-- Quick Stats Bar -->
     <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-md p-6 text-white">
+      <div class="bg-gradient-to-br from-ucad-500 to-ucad-600 rounded-xl shadow-md p-6 text-white">
         <div class="text-3xl mb-2">🎓</div>
         <p class="text-2xl font-bold">{{ stats?.total_etudiants }}</p>
-        <p class="text-sm text-blue-100">Étudiants</p>
+        <p class="text-sm text-ucad-100">Étudiants</p>
       </div>
       <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-md p-6 text-white">
         <div class="text-3xl mb-2">👨‍🏫</div>

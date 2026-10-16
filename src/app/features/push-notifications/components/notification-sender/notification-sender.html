@@ -24,7 +24,7 @@
             name="titre"
             [(ngModel)]="notification.titre"
             required
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500 focus:border-transparent outline-none transition"
             placeholder="Ex: Réunion importante"
           />
         </div>
@@ -40,7 +40,7 @@
             [(ngModel)]="notification.message"
             required
             rows="4"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition resize-none"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500 focus:border-transparent outline-none transition resize-none"
             placeholder="Votre message ici..."
           ></textarea>
         </div>
@@ -55,7 +55,7 @@
             id="media_url"
             name="media_url"
             [(ngModel)]="notification.media_url"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500 focus:border-transparent outline-none transition"
             placeholder="https://exemple.com/image.jpg"
           />
         </div>
@@ -71,7 +71,7 @@
             <button
               type="button"
               (click)="filterType = 'tous'"
-              [class.bg-blue-600]="filterType === 'tous'"
+              [class.bg-ucad-600]="filterType === 'tous'"
               [class.bg-gray-200]="filterType !== 'tous'"
               [class.text-white]="filterType === 'tous'"
               [class.text-gray-700]="filterType !== 'tous'"
@@ -121,7 +121,7 @@
               [(ngModel)]="searchQuery"
               name="search"
               placeholder="Rechercher un destinataire..."
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ucad-500 focus:border-transparent outline-none transition"
             />
           </div>
 
@@ -143,7 +143,7 @@
                 type="checkbox"
                 [checked]="isSelected(cible.id_cible)"
                 (change)="toggleTarget(cible.id_cible)"
-                class="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                class="w-4 h-4 text-ucad-600 rounded focus:ring-2 focus:ring-ucad-500"
               />
               <div class="ml-3 flex-1">
                 <div class="flex items-center gap-2">
@@ -174,7 +174,7 @@
             <button
               type="button"
               (click)="selectAll()"
-              class="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              class="text-sm text-ucad-600 hover:text-ucad-700 font-medium"
             >
               Tout sélectionner
             </button>
@@ -182,7 +182,7 @@
             <button
               type="button"
               (click)="deselectAll()"
-              class="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              class="text-sm text-ucad-600 hover:text-ucad-700 font-medium"
             >
               Tout désélectionner
             </button>
@@ -213,7 +213,7 @@
           <button
             type="submit"
             [disabled]="!notificationForm.valid || selectedTargets.length === 0 || sending"
-            class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+            class="flex-1 bg-ucad-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-ucad-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
           >
                 <span *ngIf="!sending">
                   Envoyer la notification ({{ selectedTargets.length }} destinataire{{ selectedTargets.length > 1 ? 's' : '' }})

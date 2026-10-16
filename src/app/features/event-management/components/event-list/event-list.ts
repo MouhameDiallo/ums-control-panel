@@ -102,4 +102,17 @@ export class EventList implements OnInit {
     });
   }
 
+  eventDelete(eventToDelete: UniversityEvent) {
+    console.log('eventDelete', eventToDelete);
+    this.eventService.deleteEvent(eventToDelete.id).subscribe({
+      next: () => {
+        this.loadEvents();
+      },
+      error: err => {
+        console.log("Une erreur s'est produite");
+        console.error(err);
+      }
+    })
+  }
+
 }

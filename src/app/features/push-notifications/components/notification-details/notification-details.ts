@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NotificationWithTargets} from '../../../../core/models/notification.model';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import {NotificationService} from '../../services/notification.service';
 
 export interface CibleResponse {
   id_cible: number;
@@ -34,7 +35,10 @@ export class NotificationDetails implements OnInit {
   notificationForm!: FormGroup;
   isEditing = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private notificationService: NotificationService,
+    ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -67,6 +71,14 @@ export class NotificationDetails implements OnInit {
         message: this.notificationForm.value.message,
         media_url: this.notificationForm.value.media_url || null
       };
+      this.notificationService.updateNotification(this.notification.id_notification, updatedData).subscribe(
+        {
+          next: (value) => {
+            console.log(value);
+          },
+          error: err => console.error(err)
+        }
+      );
       this.onSave.emit(updatedData);
       this.isEditing = false;
     }

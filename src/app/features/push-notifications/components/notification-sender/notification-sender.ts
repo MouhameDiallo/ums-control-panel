@@ -1,28 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-
-interface Cible {
-  id_cible: number;
-  type: 'etudiant' | 'personnel' | 'groupe';
-  label?: string;
-  numero?: string;
-  matricule?: string;
-  code?: string;
-}
-
-interface NotificationCreate {
-  titre: string;
-  message: string;
-  media_url?: string;
-  target_ids: number[];
-}
-
-interface NotificationResponse {
-  message: string;
-  tokens_sent_to: number;
-}
+import {NotificationService} from '../../services/notification.service';
+import {CibleService} from '../../services/cible.service';
 
 @Component({
   selector: 'app-notification-sender',
@@ -52,9 +32,11 @@ export class NotificationSender implements OnInit {
   successMessage: string = '';
   errorMessage: string = '';
 
-  private apiUrl = 'http://localhost:8000/api/v1/targets'; // À adapter selon votre configuration
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private notificationService: NotificationService,
+    private cibleService: CibleService,
+  ) {}
 
   ngOnInit(): void {
     this.loadCibles();
@@ -63,7 +45,7 @@ export class NotificationSender implements OnInit {
   loadCibles(): void {
     this.loading = true;
     // Remplacez par votre endpoint réel
-    this.http.get<Cible[]>(`${this.apiUrl}/cibles`).subscribe({
+    this.cibleService.loadCibles().subscribe({
       next: (data) => {
         this.cibles = data.map(c => ({
           ...c,
@@ -75,22 +57,10 @@ export class NotificationSender implements OnInit {
         console.error('Erreur lors du chargement des cibles:', err);
         this.errorMessage = 'Impossible de charger les destinataires';
         this.loading = false;
-        // Données de test pour le développement
-        this.loadMockData();
       }
     });
   }
 
-  loadMockData(): void {
-    this.cibles = [
-      { id_cible: 1, type: 'etudiant', numero: 'ETU001', label: 'Jean Dupont' },
-      { id_cible: 2, type: 'etudiant', numero: 'ETU002', label: 'Marie Martin' },
-      { id_cible: 3, type: 'personnel', matricule: 'PER001', label: 'Dr. Bernard' },
-      { id_cible: 4, type: 'personnel', matricule: 'PER002', label: 'Prof. Dubois' },
-      { id_cible: 5, type: 'groupe', code: 'GRP001', label: 'Licence 3 Info' },
-      { id_cible: 6, type: 'groupe', code: 'GRP002', label: 'Master 1 Data' }
-    ];
-  }
 
   getCibleLabel(cible: Cible): string {
     if (cible.type === 'etudiant') return `Étudiant ${cible.numero}`;
@@ -148,7 +118,7 @@ export class NotificationSender implements OnInit {
       target_ids: this.selectedTargets
     };
 
-    this.http.post<NotificationResponse>(`http://localhost:8000/api/v1/notifications`, payload).subscribe({
+    this.notificationService.createNotification(payload).subscribe({
       next: (response) => {
         this.successMessage = `${response.message} (${response.tokens_sent_to} token(s) envoyé(s))`;
         this.sending = false;

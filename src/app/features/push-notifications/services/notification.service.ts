@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {NotificationWithTargets} from '../../core/models/notification.model';
+import {environment} from '../../../../environments/environment';
+import {NotificationWithTargets} from '../../../core/models/notification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +18,13 @@ export class NotificationService {
 
   deleteNotification(id_notification: number) {
     return this.http.delete(this.resourcePath+id_notification,)
+  }
+
+  updateNotification(id_notification: number, payload: Partial<NotificationWithTargets>) {
+    return this.http.put(this.resourcePath+id_notification,payload)
+  }
+
+  createNotification(notification: NotificationCreate) {
+    return this.http.post<NotificationResponse>(this.resourcePath, notification);
   }
 }

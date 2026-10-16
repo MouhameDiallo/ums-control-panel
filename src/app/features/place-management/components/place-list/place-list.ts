@@ -45,7 +45,6 @@ export class PlaceList implements OnInit {
     this.loading.set(true);
     this.placeService.getPlaces().subscribe({
       next: (data) => {
-        console.log(data);
         this.places.set(data);
         this.filteredPlaces.set(data);
         this.loading.set(false);
@@ -73,8 +72,9 @@ export class PlaceList implements OnInit {
     }
 
     const payload: any = {
-      // libelle: this.placeForm.libelle,
-      // codification: this.placeForm.codification,
+      libelle: this.placeForm.libelle,
+      codification: this.placeForm.codification,
+      type: this.placeForm.type,
       latitude: this.placeForm.latitude,
       longitude: this.placeForm.longitude,
     };
@@ -83,7 +83,7 @@ export class PlaceList implements OnInit {
       // Update
       this.placeService.updatePlace(this.selectedPlaceId()!, this.selectedPlaceType()!,payload).subscribe({
         next: () => {
-          this.showAlert('Utilisateur modifié avec succès', 'success');
+          this.showAlert('Lieu modifié avec succès', 'success');
           this.loadPlaces();
           this.resetForm();
         },
