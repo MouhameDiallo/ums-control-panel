@@ -115,4 +115,9 @@ export class EventList implements OnInit {
     })
   }
 
+  formatEventDescription(event: UniversityEvent): string {
+    if (event.description.length <= 200) return event.description;
+    return `${event.description.substring(0, 200)}...`;
+  }
+
 }

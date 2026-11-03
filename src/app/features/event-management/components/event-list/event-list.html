@@ -85,13 +85,13 @@
             </td>
             <td class="px-6 py-4">
               <div class="font-semibold text-gray-800">{{ event.title }}</div>
-              <div class="text-sm text-gray-600 mt-1">{{ event.description }}</div>
+              <div class="text-sm text-gray-600 mt-1">{{ formatEventDescription(event)}}</div>
             </td>
             <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
               <i class="fas fa-clock mr-2 text-ucad-600"></i>
               {{ formatDate(event.date) }}
             </td>
-            <td class="px-6 py-4 text-sm text-gray-700">
+            <td class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
               <i class="fas fa-map-marker-alt mr-2 text-red-600"></i>
               {{ event.location }}
             </td>
